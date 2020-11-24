@@ -24,9 +24,12 @@ interface CalculatorProps {
 interface RecipeEditorProps {
   ingredients: Ingredient[];
   addIngredient: () => void;
-  removeIngredient: (ingredientName: string) => () => void;
-  editIngredient: (ingredientName: string) => (ingredient: IngredientPartial) => void;
+  removeIngredient: (ingredientKey: string) => () => void;
+  editIngredient: (ingredientKey: string) => (ingredient: IngredientPartial) => void;
+  setPrimaryFlour: (ingredientKey: string) => () => void;
 }
+
+type ReactEvent = React.ChangeEvent<HTMLInputElement>;
 
 const CalcWrapper = styled.div``;
 const IngredientWrapper = styled.div``;
@@ -51,13 +54,14 @@ const Calculator = ({ingredients}: CalculatorProps) => (
     </CalcWrapper>
 );
 
-const RecipeEditor = ({ingredients, addIngredient, removeIngredient, editIngredient}: RecipeEditorProps) => (
+const RecipeEditor = ({ingredients, addIngredient, removeIngredient, editIngredient, setPrimaryFlour}: RecipeEditorProps) => (
   <EditorWrapper>
     {ingredients.map(({key, name, weight, isFlour, isPrimaryFlour}: Ingredient) => (
       <IngredientWrapper key={key}>
-        <IngredientInput value={name} onChange={({target}) => editIngredient(key)({name: target.value})} />
-        <IngredientInput value={weight} onChange={({target}) => editIngredient(key)({weight: parseInt(target.value)})} />
-        <BoolToggle label="flour?" isChecked={isFlour} onChange={({target}) => editIngredient(key)({isFlour: target.checked})} />
+        <IngredientInput value={name} onChange={({target}: ReactEvent) => editIngredient(key)({name: target.value})} />
+        <IngredientInput value={weight} onChange={({target}: ReactEvent) => editIngredient(key)({weight: parseInt(target.value)})} />
+        <BoolToggle label="flour?" isChecked={isFlour} onChange={({target}: ReactEvent) => editIngredient(key)({isFlour: target.checked})} />
+        {isFlour && <BoolToggle label="Main flour?" isChecked={isPrimaryFlour} onChange={setPrimaryFlour(key)} />}
         <button onClick={removeIngredient(key)}>Remove</button>
       </IngredientWrapper>
     ))}
@@ -75,7 +79,7 @@ const defaultIngredients = [
   {key: nanoid(), name: "Salt", weight: 18, isFlour: false, isPrimaryFlour: false},
 ];
 
-const createIngredient = key => ({key, name: '', weight: 0, isFlour: false, isPrimaryFlour: false});
+const createIngredient = (key: string) => ({key, name: '', weight: 0, isFlour: false, isPrimaryFlour: false});
 
 export default function Home() {
 
@@ -84,10 +88,11 @@ export default function Home() {
   const addFn = () => setIngredients(prevIngredients => ([...prevIngredients, createIngredient(nanoid())]));
   const removeFn = (ingredientKey: string) => () => setIngredients(prevIngredients => prevIngredients.filter(({key}) => key !== ingredientKey));
   const editFn = (ingredientKey: string) => (ingredient: IngredientPartial) => setIngredients((_: Ingredient[]) => ingredients.map(prevIngredient => prevIngredient.key === ingredientKey ? {...prevIngredient, ...ingredient} : prevIngredient));
+  const setPrimaryFlourFn = (ingredientKey: string) => () => setIngredients((_:Ingredient[]) => ingredients.map(prevIngredient => ({...prevIngredient, isPrimaryFlour: prevIngredient.key === ingredientKey})));
 
   return (
     <>
-    <RecipeEditor ingredients={ingredients} addIngredient={addFn} removeIngredient={removeFn} editIngredient={editFn} />
+    <RecipeEditor ingredients={ingredients} addIngredient={addFn} removeIngredient={removeFn} editIngredient={editFn} setPrimaryFlour={setPrimaryFlourFn} />
     <Calculator ingredients={ingredients} />
     </>)
 }
