@@ -1,28 +1,26 @@
-# TypeScript & Styled Components Next.js example
+# Bread Calculator Readme
 
-This is a really simple project that show the usage of Next.js with TypeScript and Styled Components.
+This app will be a simple calculator to calculate bakers' percentages in your recipe.
 
-## Deploy your own
+## What? Why?
+Baking recipes are often written in percentages, but the way they work can be confusing if you don't know about them. But once you know the trick, they're actually quite simple.
 
-Deploy the example using [Vercel](https://vercel.com):
+Here's the trick: Take the total amount of flour - this will be 100%. From there, all other ingredients are measured as a percentage of baker's flour.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/vercel/next.js/tree/canary/examples/with-typescript-styled-components)
+For example, in this recipe:
 
-## How to use it?
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
-
-```bash
-npx create-next-app --example with-typescript-styled-components with-typescript-styled-components
-# or
-yarn create next-app --example with-typescript-styled-components with-typescript-styled-components
+```
+- Plain flour     500g  51.55%
+- Baker's flour   250g  25.77%
+- Rye flour       130g  13.40%
+- Spelt flour     90g   09.29%
+- Water           750g  77.32%
+- Levain          235g  24.23%
+- Salt            18g   01.86%
 ```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/import?filter=next.js&utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+In this recipe, the combined weight of the plain, baker's, rye and spelt flours is 970g.
+Thus, all the weights can be measured as percentages of that combined weight.
 
-## Notes
-
-This is an amalgamation of the 2 existing examples:
-
-- [with-typescript](https://github.com/vercel/next.js/tree/canary/examples/with-typescript)
-- [with-styled-components](https://github.com/vercel/next.js/tree/canary/examples/with-styled-components)
+## Ok, but why?
+Baker's percentages allow you to scale your recipe as necessary. For instance, if you have less than the required amount of plain flour, or you want to make a bulk batch, you can easily scale the rest of the recipe accordingly.
